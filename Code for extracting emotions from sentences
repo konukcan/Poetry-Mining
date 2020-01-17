@@ -1,8 +1,7 @@
  ### Here is the code to extract scores of emotions from sentences.
  Reminder:  the arrays after each sentence score emotions in the following order : joy, fear, sadness, anger, surprise, disgust.
- 
- '''
 
+```
 import requests
 from bs4 import BeautifulSoup
 import nltk
@@ -45,7 +44,8 @@ for sent in sentences:
 for whatever in general[500:600]:
     print("::: \n")
     print(whatever)
-    '''
+ ```
+ 
     Les commentaires suivants peuvent être ajoutés :
     
     -
