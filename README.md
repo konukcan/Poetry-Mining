@@ -1,5 +1,7 @@
 
-# Introduction.
+# Analyse de textes poétiques avec Python.
+
+## <a name ="intro"></a> Introduction
 
 
 L'évolution culturele est une discipline des sciences cognitives importante et en plein développement qui essaye de mettre au jour les lois de transmission et d'évolution des objets culturels à travers les sociétés et à travers le temps. 
@@ -14,24 +16,24 @@ J'ai travaillé pour cette recherche sur trois ouvrages poétiques majeurs du XI
 Les liens vers ces textes complets, trouvables sur internet et que j'ai utilisé pour mon analyse, ainsi que le lexique FEEL, sont disponibles dans les répositoires consacrés au sein de ce projet.
 
 ## Table des matières
+###### [Introduction](#intro)
+###### [Extraire des fréquences de mots avec FreqDist ()](#extract)
+###### [Identifier des émotions dans des phrases avec le lexique FEEL](#FEEL)
+###### [Retours sur expérience et choses que j'ai apprises](#retours)
 
-###### Extraire des fréquences de mots avec FreqDist ()
-###### Identifier des émotions dans des phrases avec le lexique FEEL
-###### Retours sur expérience et choses que j'ai apprises
 
-
-## **Extraire des fréquences de mots avec FreqDist ()**
+## <a name ="extract"></a> **Extraire des fréquences de mots avec FreqDist ()**
 
 La première tâche que nous avons dû accomplir pour ce projet, préalable aux deux opérations d'analyse textuelle que nous allons faire ensuite, a été d'extraire les textes de bases de données en ligne. 
 
-Trouver des textes en ligne suffisamment exploitable était en soi une tâche difficile, car il fallait trouver des corpus de textes qui soient à la fois assez grands pour être représentatifs de l'oeuvre d'un auteur, importables au format html et pas ou peu corrompus (entendre par là avec peu de charactères parasites au milieu des mots/phrases, peu ou pas de coquilles dans la digitalisation.
+Trouver des textes en ligne suffisamment exploitables était en soi une tâche difficile, car il fallait trouver des corpus de textes qui soient à la fois assez grands pour être représentatifs de l'oeuvre d'un auteur, importables au format html et pas ou peu corrompus (entendre par là avec peu de charactères parasites au milieu des mots/phrases, peu ou pas de coquilles dans la digitalisation).
 
 Pour faire cette extraction j'ai utilisé deux modules :
 
 1)Premièrement le module `requests`, qui me permet d'aller chercher un texte sur internet à partir de son url.
 
 
-```ruby
+```python
 
 import requests
 url = 'http://www.gutenberg.org/files/12005/12005-h/12005-h.htm'
@@ -47,7 +49,7 @@ Ici en 'url' on a mis l'url de la page Gutenberg qui renvoie au texte complet de
 
 Pour cela on utilise le module `BeautifulSoup`, qui permet de sélectionner spécifiquement le texte dans un document qui mêle du texte et d'autres types de données :
 
-```ruby
+```python
 
 from bs4 import beautifulSoup
 soup = BeautifulSoup(html, features="lxml")
@@ -57,7 +59,7 @@ text = soup.get_text()
 Ensuite, pour éviter de bruiter l'analyse, on enlève les parties du texte qui ne font pas partie de l’œuvre et qui sont simplement des ajouts introductifs et conclusifs de la librairie Gutenberg.
 Il s'agissait pour cela simplement de copier coller ces parties de textes dans une fenêtre de Jupyter pour savoir combien de lignes ils faisaient chacun, et ensuite de soustraire d'autant de lignes notre document pour n'avoir que le texte qui se trouve entre l'un et l'autre :
 
-```ruby
+```python
 
 #enlever l'exergue de début du texte
 text_sans_préface = text[86:]
@@ -68,7 +70,7 @@ text_sans_copyright = text_sans_préface[0:-370]
 
 On tokenise ensuite le texte en mots en utilisant le module `Regexp` qui fait partie du package nltk, étape préalable au comput de mots :
 
-```ruby
+```python
 
 tokenizer = nltk.tokenize.RegexpTokenizer('\w+')
 tokens = tokenizer.tokenize(text_sans_copyright)
@@ -76,7 +78,7 @@ tokens = tokenizer.tokenize(text_sans_copyright)
 ```
 Puis, afin de mettre sur le même plan tous les mots et ne pas avoir de bruit dû au fait que le compteur de fréquence considère comme différents les mots qui commenceraient par une majuscule et les autres. Pour cela on place les tokens de mots isolés à l'étape précédente dans une nouvelle liste en les mettant tous en minuscule au passage, avec la méthode `.lower()` de nltk.
 
-```ruby
+```python
 
 words = [token.lower() for token in tokens]
 
@@ -85,7 +87,7 @@ words = [token.lower() for token in tokens]
 Avant d'utiliser la fonction `FreqDist( )` sur cette liste, je dois aussi éliminer tous les mots sans intérêt qui, si ils sont très fréquents, risque de brouiller l'analyse en mettant en avant des mots sans intérêt car peu chargés sémantiquement même si ils sont très fréquents. 
 Pour cela je crée trois listes différentes de mots sans intérêt :
 
-```ruby
+```python
 
 #Liste des 'stops-words'
 nltk.download('stopwords')
@@ -107,20 +109,20 @@ L'exclusion de 'chants', même si ils s'agit en soit d'un mot pertinent, est due
 
 A noter, pour cette liste et la suivante, que je n'ai pas fait de distinction entre les mots à exclure pour un texte et pour les deux autres; tous ne présentent pas les mêmes mots 'parasites', mais comme cela simplifie les choses j'ai préféré rassembler tous les mots à exclure dans une seule et même liste, réutilisable pour les différents textes (exclure un mot d'un texte où il n'est pas présent n'étant pas un problème de toute façon). 
 
-La deuxième liste, 'uninteresting', rassemble tous les mots qui font légitimement partie du décompte final, mais qui ne présente pas d'intérêt, pour la raison que, comme les 'stopwords', ce sont d'avantage des mots fonctionnels servant à structurer la phrase grammaticalement parlant que des mots porteurs de sens et donc indicateurs des champs lexicaux dominant dans un texte donné.
+La deuxième liste, 'uninteresting', rassemble tous les mots qui font légitimement partie du décompte final, mais qui ne présentent pas d'intérêt, pour la raison que, comme les 'stopwords', ce sont d'avantage des mots fonctionnels servant à structurer la phrase grammaticalement parlant que des mots porteurs de sens et donc indicateurs des champs lexicaux dominant dans un texte donné.
 
 Une fois ces listes crées, je crée une nouvelle liste, 'words_clean', qui va contenir tous les mots de mon texte (en lettres minuscules), à l'exception de ceux présents dans les listes précédentes, que j'exclue en itérant sur la liste précédente, 'words', avec une boucle for :
-```ruby
+```python
 
 words_clean = []
 for word in words:
     if word not in sw+artifacts+uninteresting:
-                    words_clean.append(word)
+        words_clean.append(word)
 
 ```
-Une fois ceci fait, il ne me reste plus qu'a effectuer la dernière étape, qui consiste à utiliser la fonction freqdist sur la liste ainsi crée puis à plotter les résultats : 
+Une fois ceci fait, il ne me reste plus qu'a effectuer la dernière étape, qui consiste à utiliser la fonction `FreqDist` sur la liste ainsi crée puis à plotter les résultats : 
 
-```ruby
+```python
 
 freqdist = nltk.FreqDist(words_clean)
 freqdist.plot(25)
@@ -148,13 +150,13 @@ D'autre part, on peut rapidement aussi voir une plus grande présence du champ l
 Ceci confirme des intuitions déjà observées par certains critiques littéraires, en utilisant d'autres méthodes quantitative, qui en renforcent la certitude d'une certaine manière (voir par exemple Bachelard, 1963)
 
 
-## **Identifier des émotions dans des phrases avec le lexique FEEL**
+## <a name ="FEEL"></a>**Identifier des émotions dans des phrases avec le lexique FEEL**
 
 
 La deuxième opération que j'ai pu mettre en oeuvre consiste à extraire le sentiment de phrases du texte, en utilisant un lexique émotionnel.
 J'ai utilisé le lexique FEEL, développé par Abaxxx et al. et disponible en accès libre en ligne (déposé sur GitHub). Celui-ci se compose de près de 15000 mots et expressions de la langue française, et associés à eux, une certaine polarité de sentiment et un score binaire pour six émotions : joie, peur, tristesse, colère, surprise et dégoût.
 
-Nous avons considéré que l'analyse par pure polarité (positive ou négative), utilisée dans les 'Sentiment analysis' classique et qui fonctionne pour des  tweets ou des critiques de cinéma, n'était pas très pertinente pour analyser des textes littéraires plus complexes et nous avons décidé de nous concentrer sur les émotions un peu plus complexes distinguées par ce lexique.
+Nous avons considéré que l'analyse par pure polarité (positive ou négative), utilisée dans les 'Sentiment analysis' classiques et qui fonctionne pour des  tweets ou des critiques de cinéma, n'était pas très pertinente pour analyser des textes littéraires plus complexes et nous avons décidé de nous concentrer sur les émotions un peu plus complexes distinguées par ce lexique.
 
 De plus, le score binaire donné par cette liste permettait de les additionner pour a voir des scores globaux à l'échelle de la phrase. 
 
@@ -171,7 +173,7 @@ Le code et les étapes que j'ai utilisées sont les suivantes :
 
 Premièrement, une importation et un nettoyage du texte, qui est le même que dans le code précédent pour les fréquences de mots :
 
-```ruby
+```python
 
 import requests
 from bs4 import BeautifulSoup
@@ -197,7 +199,7 @@ Ensuite, rendre le lexique FEEL utilisable pour mon analyse:
 
 Premièrement, en le mettant sous forme de `DataFrame` avec pandas :
 
-```ruby
+```python
 
 file = 'FEEL.csv'
 feel_data = pd.read_csv(file)
@@ -207,7 +209,7 @@ feely_data = pd.DataFrame(feel_data)
 
 Deuxièmement, en créant un dictionnaire qui ne retient que les deux valeurs qui nous intéresse, associées l'une à l'autre : les mots, situés dans la colonne 'word' du DataFrame, qui seront les keys du dictionnaire  ; les 6 valences émotionnelles respectivement associées à chaque mot, qui sont situées dans les colonnes 3 à 10. Ce qui donne :
 
-```ruby
+```python
 
 feely_dict = {}
 
@@ -217,7 +219,7 @@ for index, row in feely_data.iterrows():
 ```
 
 Une fois ceci fait, je split le texte ainsi obtenu à l'échelle de la phrase en utilisant la fonction `.split()` :
-```ruby
+```python
 
 sentences = text.split(".")
 
@@ -225,7 +227,7 @@ sentences = text.split(".")
 Puis je vais créer une boucle qui va itérer sur chaque phrase du texte pour créer un array associé à cette phrase, puis sur chaque mot de la phrase de telle façon que pour chacun des mots se trouvant dans le dictionnaire précédemment crée, les valeurs pour les 6 émotions distinguées lui étant associées s'ajoutent à l'array de cette phrase en s'additionnant. On ajoutera
 ensuite les suites de phrases et leurs scores respectifs à un array plus large qui contiendra les valeurs pour toutes les phrases du texte. Soit en tout :
 
-```ruby
+```python
 
 sentences_and_scores = []
 
@@ -242,7 +244,7 @@ Ce code permet de mettre à la suite l'un de l'autre, dans l'array `sentences_an
 
 Ceci une fois fait, il ne reste plus qu'à faire une boucle d'impression sur les éléments de la liste en insérant entre chaque élément des séparateurs/ passage à la ligne pour plus de clarté et de lisibilité :
 
-```ruby
+```python
 
 for element in sentences_and_scores[n:n+x]:
     print("::: \n")
@@ -304,7 +306,7 @@ On observe aussi qu'elles ont des valeurs très constrastées d'une phrase à la
 Ceci permet donc d'avoir une idée certes imprécise mais très rapide ( au simple coup d'oeil) des émotions à l'oeuvre dans un passage de texte, apportant ainsi un outil intéressant à l'analyse textuelle en complément de la lecture attentive et normale.
 
 
-## **Retour sur expérience et choses que j'ai apprises**
+## <a name ="retours"></a>**Retour sur expérience et choses que j'ai apprises**
 
 
 Cette expérience de programmation a été dans l'ensemble très bénéfique pour moi. 
