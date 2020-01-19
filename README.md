@@ -2,11 +2,11 @@
 # Introduction.
 
 
-L'évolution culturele est une discipline des sciences cognitives importante et en plein développement qui essaye de mettre au jour les lois de transmission et d'évolution des objets culturelles à travers les sociétés et à travers le temps. 
+L'évolution culturele est une discipline des sciences cognitives importante et en plein développement qui essaye de mettre au jour les lois de transmission et d'évolution des objets culturels à travers les sociétés et à travers le temps. 
 La recherche en évolution culturelle marche de pair avec les humanités numériques. Ces dernières consistent à exploiter l'outil informatique afin d'automatiser la recherche sur des textes mis sous forme numérique de façon à pouvoir tirer des informations de très larges bases de données historiques et/ou de textes littéraires.
-La raison pour laquelle ceci est très important pour un domaine de recherche comme l'évolution culturelle est aisée à comprendre : en étant capable de traiter de façon automatique de très larges bases de données, bien plus grandes que ce qu'un lecteur individuelle aurait pu traiter, elle permette à la recherche d'aller au-delà du texte individuel ou du petit corpus de textes et d'observer des régularités à l'échelle d'une culture ou d'une période historique tout entière, ainsi que leur variaiton au cours du temps.
+La raison pour laquelle les humanités numériques sont très importantes pour un domaine de recherche comme l'évolution culturelle est aisée à comprendre : en étant capable de traiter de façon automatique de très larges bases de données, bien plus grandes que ce qu'un lecteur individuel aurait pu traiter, elle permet à la recherche d'aller au-delà du texte individuel ou du petit corpus de textes et d'observer des régularités à l'échelle d'une culture ou d'une période historique tout entière, ainsi que leur variation au cours du temps.
 
-Etant donné que c'est le domaine de recherche dans lequel je compte me spécialiser, il est important pour moi de me familiariser avec les outils utilisés au sein des humanités numériques. Etant donné que le codage est une pratique totalement neuve pour moi, mon but pour ce semestre de formation à la programmation était avant tout de me familiariser avec les outils et modules disponibles sur Python dans le domaine de l'analyse textuelle.
+Etant donné que c'est le domaine de recherche dans lequel je compte me spécialiser, il est important pour moi de me familiariser avec les outils utilisés au sein des humanités numériques. Le codage étant une pratique totalement neuve pour moi, mon but pour ce semestre de formation à la programmation était avant tout de me familiariser avec les outils et modules disponibles sur Python dans le domaine de l'analyse textuelle.
 
 J'ai fait beaucoup de tentatives dans ce sens et dans beaucoup de directions différentes. Beaucoup desdites tentatives ont été infructueuses (largement en raison de mon manque d'expérience) - je parle rapidement de ces échecs dans la dernière section de cette présentation ("Retour sur expériences"). Mais j'ai tout de même pû au bout du compte programmer deux tâches intéressantes d'analyse textuelle : premièrement un code pour extraire les fréquences relatives de mots dans des textes littéraires. Deuxièmement, identifer les émotions dominantes dans les phrases d'un texte, en se servant pour cela du lexique émotionnel **FEEL** (French Extended Emotional Lexicon) mis en place par Abdaoui *et al*.  (2014). 
 
@@ -22,13 +22,14 @@ Les liens vers ces textes complets, trouvables sur internet et que j'ai utilisé
 
 ## **Extraire des fréquences de mots avec FreqDist ()**
 
-The first task we had to perform during this project (and that would be useful) for the two operations later to be performed on text, was to be able to extract the text from online databases.
+La première tâche que nous avons dû accomplir pour ce projet, préalable aux deux opérations d'analyse textuelle que nous allons faire ensuite, a été d'extraire les textes de bases de données en ligne. 
 
-Finding suited online texts among the databases available online was in itself not an easy task, because we had to find texts that were both large enough to be representative of the whole work of an author, importable under html format and not corrupt (not full of parsitic characters in the middle of the text - I cover all the failed attempts I had with this regard in the last section.
+Trouver des textes en ligne suffisamment exploitable était en soi une tâche difficile, car il fallait trouver des corpus de textes qui soient à la fois assez grands pour être représentatifs de l'oeuvre d'un auteur, importables au format html et pas ou peu corrompus (entendre par là avec peu de charactères parasites au milieu des mots/phrases, peu ou pas de coquilles dans la digitalisation.
 
-To perform text extraction I used two main modules:
+Pour faire cette extraction j'ai utilisé deux modules :
 
-1) the request modules form python, which allowed me to get a text from the internet.
+1)Premièrement le module `requests`, qui me permet d'aller chercher un texte sur internet à partir de son url.
+
 
 ```ruby
 
@@ -42,9 +43,9 @@ html = r.text
 
 Ici en 'url' on a mis l'url de la page Gutenberg qui renvoie au texte complet des Chants de Maldoror de Lautréamont, mais il est possible de la remplacer par une autre url pour requérir un autre texte.
 
-Une fois ceci fait il est importer de nettoyer le texte pour le rendre propre à l'analyse, car celui-ci est bruité, en particulier par des balises html.
+2)Une fois ceci fait il est important de nettoyer le texte pour le rendre propre à l'analyse, car celui-ci est bruité, en particulier par des balises html.
 
-Pour cela on utilise le module BeautifulSoup, qui permet de sélectionner spécifiquement le texte dans un document qui mêle du texte et d'autres types de données :
+Pour cela on utilise le module `BeautifulSoup`, qui permet de sélectionner spécifiquement le texte dans un document qui mêle du texte et d'autres types de données :
 
 ```ruby
 
@@ -65,7 +66,7 @@ text_sans_copyright = text_sans_préface[0:-370]
 
 ```
 
-On tokenise ensuite le texte en mots en utilisant le module Regexp qui fait partie du package de nltk, étape préalable au comput de mots :
+On tokenise ensuite le texte en mots en utilisant le module `Regexp` qui fait partie du package nltk, étape préalable au comput de mots :
 
 ```ruby
 
@@ -73,7 +74,7 @@ tokenizer = nltk.tokenize.RegexpTokenizer('\w+')
 tokens = tokenizer.tokenize(text_sans_copyright)
 
 ```
-Puis, afin de mettre sur le même plan tous les mots et ne pas avoir de bruit dû au fait que le compteur de fréquence considère comme différents les mots qui commenceraient par une majuscule et les autres. Pour cela on place les tokens de mots isolés à l'étape précédente dans une nouvelle liste en les mettant tous en minuscule au passage, avec la méthode .lower() de nltk.
+Puis, afin de mettre sur le même plan tous les mots et ne pas avoir de bruit dû au fait que le compteur de fréquence considère comme différents les mots qui commenceraient par une majuscule et les autres. Pour cela on place les tokens de mots isolés à l'étape précédente dans une nouvelle liste en les mettant tous en minuscule au passage, avec la méthode `.lower()` de nltk.
 
 ```ruby
 
@@ -81,7 +82,7 @@ words = [token.lower() for token in tokens]
 
 ```
 
-Avant d'utiliser la fonction freqdist( ) sur cette liste, je dois aussi éliminer tous les mots sans intérêt qui, si ils sont très fréquents, risque de brouiller l'analyse en mettant en avant des mots sans intérêt car peu chargés sémantiquement même si ils sont très fréquents. 
+Avant d'utiliser la fonction `FreqDist( )` sur cette liste, je dois aussi éliminer tous les mots sans intérêt qui, si ils sont très fréquents, risque de brouiller l'analyse en mettant en avant des mots sans intérêt car peu chargés sémantiquement même si ils sont très fréquents. 
 Pour cela je crée trois listes différentes de mots sans intérêt :
 
 ```ruby
@@ -194,7 +195,7 @@ text_sans_copyright = text_sans_préface[0:-370]
 
 Ensuite, rendre le lexique FEEL utilisable pour mon analyse:
 
-Premièrement, en le mettant sous forme de DataFrame avec pandas :
+Premièrement, en le mettant sous forme de `DataFrame` avec pandas :
 
 ```ruby
 
@@ -215,7 +216,7 @@ for index, row in feely_data.iterrows():
 
 ```
 
-Une fois ceci fait, je split le texte ainsi obtenu à l'échelle de la phrase en utilisant la fonction .split() :
+Une fois ceci fait, je split le texte ainsi obtenu à l'échelle de la phrase en utilisant la fonction `.split()` :
 ```ruby
 
 sentences = text.split(".")
@@ -237,7 +238,7 @@ for sent in sentences:
     sentences_and_scores.append([sum(i) for i in zip(*array)])
 
 ```
-Ce code permet de mettre à la suite l'un de l'autre, dans l'array sentences_and_scores ainsi constitué, les phrases du texte et leur score global.
+Ce code permet de mettre à la suite l'un de l'autre, dans l'array `sentences_and_scores` ainsi constitué, les phrases du texte et leur score global.
 
 Ceci une fois fait, il ne reste plus qu'à faire une boucle d'impression sur les éléments de la liste en insérant entre chaque élément des séparateurs/ passage à la ligne pour plus de clarté et de lisibilité :
 
@@ -252,7 +253,7 @@ for element in sentences_and_scores[n:n+x]:
 
 En connaissant à peu près l'ordre du texte, on peut aller chercher un passage qui nous intéresse pour savoir quelle est l'émotion dominante dans cette partie de l'oeuvre.
 
-Par exemple, en allant chercher du texte au hasard au milieu des Chants de Maldoror en prenant comme index au début de la boucle  ' for element in sentences_and_scores[550:600]', on obtient un output qui a cette forme :
+Par exemple, en allant chercher du texte au hasard au milieu des Chants de Maldoror en prenant comme index au début de la boucle  'for element in sentences_and_scores[550:600]', on obtient un output qui a cette forme :
 
 
 `````
@@ -306,8 +307,8 @@ Ceci permet donc d'avoir une idée certes imprécise mais très rapide ( au simp
 ## **Retour sur expérience et choses que j'ai apprises**
 
 
-Cette expérience de programmation a été dans l'ensemble très bénéfique. 
-L'expérience la plus agréable a été de voir que certaines choses en termes d'analyse de texte qui me semblaient de prime abord très compliquées et irréalisables pour quelqu'un qui n'a jamais codé auparavant s'avéraient à l'essai faisables à force de recherche, de demande de conseils et d'essais/erreurs.
+Cette expérience de programmation a été dans l'ensemble très bénéfique pour moi. 
+L'aspect le plus agréable a été de voir que certaines choses en termes d'analyse de texte qui me semblaient de prime abord très compliquées et irréalisables pour quelqu'un qui n'a jamais codé auparavant s'avéraient à l'essai faisables à force de recherche, de demande de conseils et d'essais/erreurs.
 J'ai tout de même eu quelques frustrations au cours de ce travail, la principale ayant été de ne pas avoir réussi à lemmatiser le texte pour augmenter la pertinence des résultats, à la fois de l'analyse de fréquence et de l'analyse des émotions. La raison en est d'une part que presque tous les lemmatiseurs et bases de données disponibles en open source sont fait pour l'anglais ; d'autre part que les deux lemmatiseurs que j'ai pu trouver qui acceptaient le français, Spacy et TreeTagger n'ont pas été utilisable, le premier parce qu'il n'accepte que des strings en inputs et ne fonctionne pas sur des listes (et en dépit de maints essais et demandes de conseils, je n'ai pas réussi à résoudre le problème en itérant sur une liste de strings, notamment en raison du fait qu'il faut d'abord faire un parsing de la syntaxe avant de pouvoir lemmatiser dans Spacy). Quant à TreeTagger, je n'ai tout simplement pas réussi à l'installer, le problème étant certainement dû d'une façon ou d'une autre à mon ordinateur car tout se passait de façon bien différente sur des ordinateurs de tiers/amis.
 
-En dépit du fait que nous avions eu moins de préparation en amont que l'année dernière, cette expérience de programmation ce semestre a tout de même été très agréable et donnait une bonne introduction au code qui m'a donné confiance dans ma capacité à réutilisé cet outil dans le cadre de mes travaux de recherche ultérieurs.
+En dépit du fait que nous avions eu moins de préparation en amont que l'année dernière, cette expérience de programmation ce semestre a tout de même été très utile et donnait une bonne introduction au code qui m'a donné confiance dans ma capacité à réutiliser cet outil dans le cadre de mes travaux de recherche ultérieurs.
