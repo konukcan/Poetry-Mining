@@ -139,7 +139,7 @@ Pour Rimbaud :
 
 Pour Lautréamont :
 
-![Image of Lautréamont](https://github.com/konukcan/Poetry-Mining/blob/master/plot%20lautr%C3%A9amont.png)
+![Image of Lautréamont](https://github.com/konukcan/Poetry-Mining/blob/master/plot%20lautr%C3%A9amont_real.png)
 
 Ce que l'on peut voir sur ces graphiques c'est le fait qu'il y a une relative uniformité de la distribution entre les deux premiers auteurs, tandis que le dernier auteur se trouve à part dans une certaine distance. En quelque sorte, ceci atteste que, lexicalement parlant du moins, entre les trois auteurs les plus novateurs du XIX e siècle français, il y a une plus grande originalité dans le choix des mots chez Lautréamont qui s'écarte des tropes lexicales de la poésie classiques.
 
