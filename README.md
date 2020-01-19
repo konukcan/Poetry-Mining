@@ -4,7 +4,7 @@
 ## <a name ="intro"></a> Introduction
 
 
-L'évolution culturele est une discipline des sciences cognitives importante et en plein développement qui essaye de mettre au jour les lois de transmission et d'évolution des objets culturels à travers les sociétés et à travers le temps. 
+L'évolution culturelle est une discipline des sciences cognitives importante et en plein développement qui essaye de mettre au jour les lois de transmission et d'évolution des objets culturels à travers les sociétés et à travers le temps. 
 La recherche en évolution culturelle marche de pair avec les humanités numériques. Ces dernières consistent à exploiter l'outil informatique afin d'automatiser la recherche sur des textes mis sous forme numérique de façon à pouvoir tirer des informations de très larges bases de données historiques et/ou de textes littéraires.
 La raison pour laquelle les humanités numériques sont très importantes pour un domaine de recherche comme l'évolution culturelle est aisée à comprendre : en étant capable de traiter de façon automatique de très larges bases de données, bien plus grandes que ce qu'un lecteur individuel aurait pu traiter, elle permet à la recherche d'aller au-delà du texte individuel ou du petit corpus de textes et d'observer des régularités à l'échelle d'une culture ou d'une période historique tout entière, ainsi que leur variation au cours du temps.
 
@@ -248,14 +248,14 @@ Ceci une fois fait, il ne reste plus qu'à faire une boucle d'impression sur les
 
 for element in sentences_and_scores[n:n+x]:
     print("::: \n")
-    print(stuff)
+    print(element)
     
 ```
 
 
 En connaissant à peu près l'ordre du texte, on peut aller chercher un passage qui nous intéresse pour savoir quelle est l'émotion dominante dans cette partie de l'oeuvre.
 
-Par exemple, en allant chercher du texte au hasard au milieu des Chants de Maldoror en prenant comme index au début de la boucle  'for element in sentences_and_scores[550:600]', on obtient un output qui a cette forme :
+Par exemple, en allant chercher du texte au hasard au milieu des Chants de Maldoror en prenant comme index au début de la boucle  `for element in sentences_and_scores[550:600]`, on obtient un output qui a cette forme :
 
 
 `````
@@ -311,6 +311,6 @@ Ceci permet donc d'avoir une idée certes imprécise mais très rapide ( au simp
 
 Cette expérience de programmation a été dans l'ensemble très bénéfique pour moi. 
 L'aspect le plus agréable a été de voir que certaines choses en termes d'analyse de texte qui me semblaient de prime abord très compliquées et irréalisables pour quelqu'un qui n'a jamais codé auparavant s'avéraient à l'essai faisables à force de recherche, de demande de conseils et d'essais/erreurs.
-J'ai tout de même eu quelques frustrations au cours de ce travail, la principale ayant été de ne pas avoir réussi à lemmatiser le texte pour augmenter la pertinence des résultats, à la fois de l'analyse de fréquence et de l'analyse des émotions. La raison en est d'une part que presque tous les lemmatiseurs et bases de données disponibles en open source sont fait pour l'anglais ; d'autre part que les deux lemmatiseurs que j'ai pu trouver qui acceptaient le français, Spacy et TreeTagger n'ont pas été utilisable, le premier parce qu'il n'accepte que des strings en inputs et ne fonctionne pas sur des listes (et en dépit de maints essais et demandes de conseils, je n'ai pas réussi à résoudre le problème en itérant sur une liste de strings, notamment en raison du fait qu'il faut d'abord faire un parsing de la syntaxe avant de pouvoir lemmatiser dans Spacy). Quant à TreeTagger, je n'ai tout simplement pas réussi à l'installer, le problème étant certainement dû d'une façon ou d'une autre à mon ordinateur car tout se passait de façon bien différente sur des ordinateurs de tiers/amis.
+J'ai tout de même eu quelques frustrations au cours de ce travail, la principale ayant été de ne pas avoir réussi à lemmatiser le texte pour augmenter la pertinence des résultats, à la fois de l'analyse de fréquence et de l'analyse des émotions. La raison en est d'une part que presque tous les lemmatiseurs et bases de données disponibles en open source sont fait pour l'anglais ; d'autre part que les deux lemmatiseurs que j'ai pu trouver qui acceptaient le français, Spacy et TreeTagger n'ont pas été utilisables, le premier parce qu'il n'accepte que des strings en inputs et ne fonctionne pas sur des listes (et en dépit de maints essais et demandes de conseils, je n'ai pas réussi à résoudre le problème en itérant sur une liste de strings, notamment en raison du fait qu'il faut d'abord faire un parsing de la syntaxe avant de pouvoir lemmatiser dans Spacy). Quant à TreeTagger, je n'ai tout simplement pas réussi à l'installer, le problème étant certainement dû d'une façon ou d'une autre à mon ordinateur car tout se passait de façon bien différente sur des ordinateurs de tiers/amis.
 
 En dépit du fait que nous avions eu moins de préparation en amont que l'année dernière, cette expérience de programmation ce semestre a tout de même été très utile et donnait une bonne introduction au code qui m'a donné confiance dans ma capacité à réutiliser cet outil dans le cadre de mes travaux de recherche ultérieurs.
