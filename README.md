@@ -1,5 +1,5 @@
 
-###### Introduction.
+# Introduction.
 
 
 L'évolution culturele est une discipline des sciences cognitives importante et en plein développement qui essaye de mettre au jour les lois de transmission et d'évolution des objets culturelles à travers les sociétés et à travers le temps. 
@@ -15,9 +15,9 @@ Les liens vers ces textes complets, trouvables sur internet et que j'ai utilisé
 
 ## Table des matières
 
-# Extraire des fréquences de mots avec FreqDist ()
-# Identifier des émotions dans des phrases avec le lexique FEEL
-# Retours sur expérience et choses que j'ai apprises
+###### Extraire des fréquences de mots avec FreqDist ()
+###### Identifier des émotions dans des phrases avec le lexique FEEL
+###### Retours sur expérience et choses que j'ai apprises
 
 
 ## **Extraire des fréquences de mots avec FreqDist ()**
@@ -75,7 +75,7 @@ tokens = tokenizer.tokenize(text_sans_copyright)
 ```
 Puis, afin de mettre sur le même plan tous les mots et ne pas avoir de bruit dû au fait que le compteur de fréquence considère comme différents les mots qui commenceraient par une majuscule et les autres. Pour cela on place les tokens de mots isolés à l'étape précédente dans une nouvelle liste en les mettant tous en minuscule au passage, avec la méthode .lower() de nltk.
 
-````ruby
+```ruby
 
 words = [token.lower() for token in tokens]
 
@@ -255,7 +255,7 @@ En connaissant à peu près l'ordre du texte, on peut aller chercher un passage 
 Par exemple, en allant chercher du texte au hasard au milieu des Chants de Maldoror en prenant comme index au début de la boucle  ' for element in sentences_and_scores[550:600]', on obtient un output qui a cette forme :
 
 
-``````
+`````
 
  Et, quand je r�de
 autour des habitations des hommes, pendant les nuits orageuses, les yeux
