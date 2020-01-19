@@ -1,5 +1,5 @@
 
-######Introduction.
+###### Introduction.
 
 
 L'évolution culturele est une discipline des sciences cognitives importante et en plein développement qui essaye de mettre au jour les lois de transmission et d'évolution des objets culturelles à travers les sociétés et à travers le temps. 
@@ -13,14 +13,14 @@ J'ai fait beaucoup de tentatives dans ce sens et dans beaucoup de directions dif
 J'ai travaillé pour cette recherche sur trois ouvrages poétiques majeurs du XIXe siècle français : *Les Chants de Maldoror*  de Lautréamont, *Les Fleurs du mal* de Baudelaire et les *Oeuvres complètes* de Rimbaud.
 Les liens vers ces textes complets, trouvables sur internet et que j'ai utilisé pour mon analyse, ainsi que le lexique FEEL, sont disponibles dans les répositoires consacrés au sein de ce projet.
 
-##Table des matières
+## Table des matières
 
-#Extraire des fréquences de mots avec FreqDist ()
-#Identifier des émotions dans des phrases avec le lexique FEEL
-#Retours sur expérience et choses que j'ai apprises
+# Extraire des fréquences de mots avec FreqDist ()
+# Identifier des émotions dans des phrases avec le lexique FEEL
+# Retours sur expérience et choses que j'ai apprises
 
 
-##**Extraire des fréquences de mots avec FreqDist ()**
+## **Extraire des fréquences de mots avec FreqDist ()**
 
 The first task we had to perform during this project (and that would be useful) for the two operations later to be performed on text, was to be able to extract the text from online databases.
 
@@ -31,6 +31,7 @@ To perform text extraction I used two main modules:
 1) the request modules form python, which allowed me to get a text from the internet.
 
 ```ruby
+
 import requests
 url = 'http://www.gutenberg.org/files/12005/12005-h/12005-h.htm'
 r = requests.get(url)
@@ -56,27 +57,35 @@ Ensuite, pour éviter de bruiter l'analyse, on enlève les parties du texte qui 
 Il s'agissait pour cela simplement de copier coller ces parties de textes dans une fenêtre de Jupyter pour savoir combien de lignes ils faisaient chacun, et ensuite de soustraire d'autant de lignes notre document pour n'avoir que le texte qui se trouve entre l'un et l'autre :
 
 ```ruby
+
 #enlever l'exergue de début du texte
 text_sans_préface = text[86:]
 #Enlever les copyrights de fin sur la page gutenberg
 text_sans_copyright = text_sans_préface[0:-370]
+
 ```
 
 On tokenise ensuite le texte en mots en utilisant le module Regexp qui fait partie du package de nltk, étape préalable au comput de mots :
 
 ```ruby
+
 tokenizer = nltk.tokenize.RegexpTokenizer('\w+')
 tokens = tokenizer.tokenize(text_sans_copyright)
+
 ```
 Puis, afin de mettre sur le même plan tous les mots et ne pas avoir de bruit dû au fait que le compteur de fréquence considère comme différents les mots qui commenceraient par une majuscule et les autres. Pour cela on place les tokens de mots isolés à l'étape précédente dans une nouvelle liste en les mettant tous en minuscule au passage, avec la méthode .lower() de nltk.
 
 ````ruby
-words = [token.lower() for token in tokens]``
+
+words = [token.lower() for token in tokens]
+
+```
 
 Avant d'utiliser la fonction freqdist( ) sur cette liste, je dois aussi éliminer tous les mots sans intérêt qui, si ils sont très fréquents, risque de brouiller l'analyse en mettant en avant des mots sans intérêt car peu chargés sémantiquement même si ils sont très fréquents. 
 Pour cela je crée trois listes différentes de mots sans intérêt :
 
 ```ruby
+
 #Liste des 'stops-words'
 nltk.download('stopwords')
 sw = nltk.corpus.stopwords.words('french')
@@ -85,6 +94,7 @@ sw = nltk.corpus.stopwords.words('french')
 artifacts = ["a", "i", "o", "or","h", "chants","the","of", "project","là", "l","1", "with","any", "this","work", "gutenberg","and","l", "-" "of", "to", "you", "in", "tm"]
 
 uninteresting = ["comme", "cette", "si", "plus", "car","où",  "sans", "ni", "tout", "dont","vers", "sous", "leurs","tous" ]
+
 ```
 
 La première est créée a priori. Il s'agit simplement de la liste des 'stopwords' du français établie par nltk. C'est-à-dire tous les mots comme les conjonctions de coordination ou les articles définis qui sont très fréquents dans un texte, tout simplement parce qu'il assurent des fonctions grammaticales importantes et pas parce qu'ils auraient un lien avec le contenu thématique du texte.
@@ -100,6 +110,7 @@ La deuxième liste, 'uninteresting', rassemble tous les mots qui font légitimem
 
 Une fois ces listes crées, je crée une nouvelle liste, 'words_clean', qui va contenir tous les mots de mon texte (en lettres minuscules), à l'exception de ceux présents dans les listes précédentes, que j'exclue en itérant sur la liste précédente, 'words', avec une boucle for :
 ```ruby
+
 words_clean = []
 for word in words:
     if word not in sw+artifacts+uninteresting:
@@ -109,24 +120,26 @@ for word in words:
 Une fois ceci fait, il ne me reste plus qu'a effectuer la dernière étape, qui consiste à utiliser la fonction freqdist sur la liste ainsi crée puis à plotter les résultats : 
 
 ```ruby
+
 freqdist = nltk.FreqDist(words_clean)
 freqdist.plot(25)
-```
 
+```
 
 Ce qui donne les résultats suivants :
 
 Pour Baudelaire : 
-![plot Baudelaire] https://github.com/konukcan/Poetry-Mining/blob/master/plot%20baudelaire.png
+
+! [plot Baudelaire] https://github.com/konukcan/Poetry-Mining/blob/master/plot%20baudelaire.png
 
 Pour Rimbaud :
 
-![plot Rimbaud]https://github.com/konukcan/Poetry-Mining/blob/master/plot%20rimbaud.png
+! [plot Rimbaud] https://github.com/konukcan/Poetry-Mining/blob/master/plot%20rimbaud.png
 
 
 Pour Lautréamont :
 
-![plot Lautréamont]https://github.com/konukcan/Poetry-Mining/blob/master/plot%20lautr%C3%A9amont.png
+! [plot Lautréamont] https://github.com/konukcan/Poetry-Mining/blob/master/plot%20lautr%C3%A9amont.png
 
 Ce que l'on peut voir sur ces graphiques c'est le fait qu'il y a une relative uniformité de la distribution entre les deux premiers auteurs, tandis que le dernier auteur se trouve à part dans une certaine distance. En quelque sorte, ceci atteste que, lexicalement parlant du moins, entre les trois auteurs les plus novateurs du XIX e siècle français, il y a une plus grande originalité dans le choix des mots chez Lautréamont qui s'écarte des tropes lexicales de la poésie classiques.
 
@@ -156,6 +169,7 @@ Ce que cet outil doit permettre, c'est avant tout de sélectionner un passage du
 Le code et les étapes que j'ai utilisées sont les suivantes :
 
 Premièrement, une importation et un nettoyage du texte, qui est le même que dans le code précédent pour les fréquences de mots :
+
 ```ruby
 
 import requests
@@ -175,12 +189,15 @@ text = soup.get_text()
 text_sans_préface = text[86:]
 #Enlever les copyrights de fin sur la page gutenberg
 text_sans_copyright = text_sans_préface[0:-370]
+
 ```
 
 Ensuite, rendre le lexique FEEL utilisable pour mon analyse:
 
 Premièrement, en le mettant sous forme de DataFrame avec pandas :
+
 ```ruby
+
 file = 'FEEL.csv'
 feel_data = pd.read_csv(file)
 feely_data = pd.DataFrame(feel_data)
@@ -190,6 +207,7 @@ feely_data = pd.DataFrame(feel_data)
 Deuxièmement, en créant un dictionnaire qui ne retient que les deux valeurs qui nous intéresse, associées l'une à l'autre : les mots, situés dans la colonne 'word' du DataFrame, qui seront les keys du dictionnaire  ; les 6 valences émotionnelles respectivement associées à chaque mot, qui sont situées dans les colonnes 3 à 10. Ce qui donne :
 
 ```ruby
+
 feely_dict = {}
 
 for index, row in feely_data.iterrows():
@@ -199,11 +217,15 @@ for index, row in feely_data.iterrows():
 
 Une fois ceci fait, je split le texte ainsi obtenu à l'échelle de la phrase en utilisant la fonction .split() :
 ```ruby
+
 sentences = text.split(".")
+
 ```
 Puis je vais créer une boucle qui va itérer sur chaque phrase du texte pour créer un array associé à cette phrase, puis sur chaque mot de la phrase de telle façon que pour chacun des mots se trouvant dans le dictionnaire précédemment crée, les valeurs pour les 6 émotions distinguées lui étant associées s'ajoutent à l'array de cette phrase en s'additionnant. On ajoutera
 ensuite les suites de phrases et leurs scores respectifs à un array plus large qui contiendra les valeurs pour toutes les phrases du texte. Soit en tout :
+
 ```ruby
+
 sentences_and_scores = []
 
 for sent in sentences:
@@ -220,9 +242,11 @@ Ce code permet de mettre à la suite l'un de l'autre, dans l'array sentences_and
 Ceci une fois fait, il ne reste plus qu'à faire une boucle d'impression sur les éléments de la liste en insérant entre chaque élément des séparateurs/ passage à la ligne pour plus de clarté et de lisibilité :
 
 ```ruby
+
 for element in sentences_and_scores[n:n+x]:
     print("::: \n")
     print(stuff)
+    
 ```
 
 
@@ -279,7 +303,7 @@ On observe aussi qu'elles ont des valeurs très constrastées d'une phrase à la
 Ceci permet donc d'avoir une idée certes imprécise mais très rapide ( au simple coup d'oeil) des émotions à l'oeuvre dans un passage de texte, apportant ainsi un outil intéressant à l'analyse textuelle en complément de la lecture attentive et normale.
 
 
-##**Retour sur expérience et choses que j'ai apprises**
+## **Retour sur expérience et choses que j'ai apprises**
 
 
 Cette expérience de programmation a été dans l'ensemble très bénéfique. 
